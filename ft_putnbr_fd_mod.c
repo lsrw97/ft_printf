@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   ft_putnbr_fd_mod.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/04 17:56:45 by eelisaro          #+#    #+#             */
-/*   Updated: 2022/12/03 14:33:47 by eelisaro         ###   ########.fr       */
+/*   Created: 2022/11/06 15:50:07 by eelisaro          #+#    #+#             */
+/*   Updated: 2022/12/16 19:20:31 by eelisaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+// #include "libft.h"
+# include <unistd.h>
+# include <stdlib.h>
+#include "ft_printf.h"
 
-static int	intlen(int n)
+static int	intlength(int n)
 {
 	int	i;
 	int	neg;
@@ -37,15 +40,15 @@ static int	intlen(int n)
 	return (i + neg);
 }
 
-char	*ft_itoa(int n)
+static char	*ft_itoas(long n)
 {
 	char		*str;
 	int			len;
 	int			i;
-	long int	num;
+	long	num;
 
 	num = n;
-	len = intlen(num);
+	len = intlength(num);
 	str = malloc(len + 1);
 	if (len == 0 || !str)
 		return (NULL);
@@ -64,4 +67,22 @@ char	*ft_itoa(int n)
 		num /= 10;
 	}
 	return (str);
+}
+
+void	ft_putnbr_fd_mod(long n, int fd, int *len)
+{
+	char			*str;
+	int				i;
+
+	i = 0;
+	str = ft_itoas(n);
+	while (str[0] != '\0')
+	{
+		write(fd, str, 1);
+		len[0]++;
+		i++;
+		str++;
+	}
+	str -= i;
+	free (str);
 }

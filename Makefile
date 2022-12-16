@@ -1,49 +1,12 @@
-SRCS	=	ft_isascii.c	\
-			ft_memcpy.c		\
-			ft_putstr_fd.c	\
-			ft_strlcat.c	\
-			ft_strrchr.c	\
-			ft_atoi.c		\
-			ft_isdigit.c	\
-			ft_memmove.c	\
-			ft_split.c		\
-			ft_strlcpy.c	\
-			ft_strtrim.c	\
-			ft_bzero.c		\
-			ft_isprint.c	\
-			ft_memset.c		\
-			ft_strchr.c		\
-			ft_strlen.c		\
-			ft_substr.c		\
-			ft_calloc.c		\
-			ft_itoa.c		\
-			ft_putchar_fd.c	\
-			ft_strdup.c		\
-			ft_strmapi.c	\
-			ft_tolower.c	\
-			ft_isalnum.c	\
-			ft_memchr.c		\
-			ft_putendl_fd.c	\
-			ft_striteri.c	\
-			ft_strncmp.c	\
-			ft_toupper.c	\
-			ft_isalpha.c	\
-			ft_memcmp.c		\
-			ft_putnbr_fd.c	\
-			ft_strjoin.c	\
-			ft_strnstr.c	\
-			ft_lstlast.c	\
-			ft_lstadd_back.c	\
-			ft_lstadd_front.c	\
-			ft_lstclear.c		\
-			ft_lstdelone.c	\
-			ft_lstiter.c		\
-			ft_lstmap.c		\
+DIRLIB		= ./libft/
 
+SRCS	=	ft_printf.c \
+			ft_putnbr_fd_mod.c \
+			printconvfromdec.c \
 
 OBJS	= ${SRCS:.c=.o}
 
-NAME	= libft.a
+NAME	= libftprintf.a
 
 CC		= gcc
 
@@ -51,22 +14,29 @@ AR		= ar rcs
 
 RM		= rm -rf
 
-# CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror
+
+NAMELFT		= libft.a
+
 
 all:		${NAME}
 
 %.o: %.c
-	${CC} -c $< ${CFLAGS} -o $@
+	${CC} ${CFLAGS} -c -I. -I${DIRLIB} $< -o ${<:.c=.o}
 
 ${NAME}:	${OBJS}
+	cd ${DIRLIB} && ${MAKE} && cp -v ${NAMELFT} ../${NAME}
 	${AR} ${NAME} ${OBJS}
 
 clean:
-	${RM} ${OBJS} ${B_OBJS}
+	${RM} ${BONUS_OBJS} ${OBJS}
+	cd ${DIRLIB} && make clean
 
 fclean:		clean
-	${RM} ${NAME}
+	${RM} ${BONUS_OBJS} ${NAME}
+	cd ${DIRLIB} && make fclean
 
 re:			fclean all
+			cd ${DIRLIB} && ${MAKE} clean
 
 .PHONY:		all clean fclean re

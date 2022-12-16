@@ -1,47 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/16 14:55:31 by eelisaro          #+#    #+#             */
+/*   Updated: 2022/12/16 20:19:56 by eelisaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "./ft_putnbr_fd.c"
-#include "./ft_putchar_fd.c"
-#include "./ft_putstr_fd.c"
+#include <limits.h>
+// #include "./ft_putnbr_fd_mod.c"
+// #include "./ft_putchar_fd.c"
+// #include "./ft_putstr_fd.c"
+// #include "./ft_strlen.c"
+#include "./libft/libft.h"
+#include "ft_printf.h"
 
-
-void	printconvfromdec(int tobase, long long number)
-{
-	char	*set;
-
-	set = "0123456789abcdef";
-	if (number / tobase == 0)
-	{
-		if (number < 0)
-		{
-			write(0, "-", 1);
-			number *= -1;
-		}
-		write(0, &set[number % tobase], 1);
-	}
-	else
-	{
-		printconvfromdec(tobase, (number / tobase));
-		if (number < 0)
-			number *= -1;
-		write(0, &set[number % tobase], 1);
-	}
-}
-
-int	ft_printf(char *str, ...)
+int ft_printf(const char *str, ...)
 {
 	int				i;
 	char			*s;
 	long long		d;
 	char			c;
-	int				countchar;
+	int				countchar[1];
 	unsigned int	ud;
 
-	countchar = 0;
-	printf("%s\n", str);
-
+	countchar[0] = 0;
 	va_list ap;
 
 	va_start(ap, str);
@@ -50,6 +40,7 @@ int	ft_printf(char *str, ...)
 
 	while (str[++i])
 	{
+
 		if (str[i] == '%')
 		{
 			i++;
@@ -57,55 +48,88 @@ int	ft_printf(char *str, ...)
 			{
 				case 'c':
 					c = va_arg(ap, int);
-					write(0, &c, 1);
+					countchar[0]++;
+					// printf("\n%d\n", countchar[0]);
+					write(1, &c, 1);
 					continue ;
 				case 's':
 					s = va_arg(ap, char *);
-					ft_putstr_fd(s, 0);
+					if (s == NULL)
+						s = "(null)";
+					countchar[0] += ft_strlen(s);
+					// printf("\n%d\n", countchar[0]);
+					ft_putstr_fd(s, 1);
 					continue ;
 				case 'p':
-					d = va_arg(ap, long long);
-					write(0, "0x10", 4);
-					printconvfromdec(16, d);
+					d = (unsigned long long)va_arg(ap, unsigned long long);
+					if (d == 0)
+					{
+						write(1, "(nil)", 5);
+						countchar[0] += 5;
+						continue ;
+					}
+					write(1, "0x", 2);
+					countchar[0] += 2;
+					printconvfromdec(16, d, "0123456789abcdef", countchar);
+					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case 'd':
 					d = va_arg(ap, int);
-					ft_putnbr_fd(d, 0);
+					ft_putnbr_fd_mod(d, 1, countchar);
+					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case 'i':
 					d = va_arg(ap, int);
-					ft_putnbr_fd(d, 0);
+					ft_putnbr_fd_mod(d, 1, countchar);
+					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case 'u':
-					ud = va_arg(ap, unsigned int);
-					ft_putnbr_fd(ud, 0);
+					ud = (unsigned int) va_arg(ap, int);
+					// printf("%lld", d);
+					ft_putnbr_fd_mod(ud, 1, countchar);
+					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case 'x':
 					d = va_arg(ap, long long);
-					printconvfromdec(16, d);
+					if (d < 0)
+						d += 4294967296;
+					printconvfromdec(16, d, "0123456789abcdef", countchar);
+					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case 'X':
 					d = va_arg(ap, long long);
-					printconvfromdec(16, d);
+					if (d < 0)
+						d += 4294967296;
+					printconvfromdec(16, d, "0123456789ABCDEF", countchar);
+					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case '%':
-					ft_putchar_fd('%', 0);
+					ft_putchar_fd('%', 1);
+					countchar[0]++;
+					// printf("\n%d\n", countchar[0]);
 					continue ;
 			}
 		}
-		write(0, &str[i], 1);
+		write(1, &str[i], 1);
+		countchar[0]++;
 	}
 	va_end(ap);
-	return countchar;
+	return countchar[0];
 }
 
-int main()
-{
-    char *s = "hello World!";
-    // printf("number: %lld, address: %p\n", i, &s);
-    ft_printf("%c, %s, %p, %d, %i, %u, %x, %X, %%\n\n", 'c', s, s, -12345, -54321, 15243, 92938, -4829);
-    printf("%c, %s, %p, %d, %i, %u, %x, %X, %%\n\n", 'c', s, s, -12345, -54321, 15243, -92938, -4829);
+// int main()
+// {
+//     // char *s = "hello World!";
+// 	// int count = 0;
 
-    printconvfromdec(16, 110);
-    return 0;
-}
+//     // // printf("number: %lld, address: %p\n", i, &s);
+//     // count = ft_printf("%c, %s, %p, %d, %i, %u, %x, %X, %%\n\n", 'c', s, s, -12345, -54321, 15243, 5, -2);
+// 	// 	printf("%d\n\n", count);
+
+//     // count = printf("%c, %s, %p, %d, %i, %u, %x, %X, %%\n\n", 'c', s, s, -12345, -54321, 15243, 5, -2);
+// 	printf(" %p %p \n\n", 0, 0);
+// 	ft_printf(" %p %p\n\n", 0, 0);
+// 	// printf("%s NULL NULL\n\n", NULL);
+//     // printconvfromdec(16, 110, "0123456789abcdef", &);
+//     return 0;
+// }
