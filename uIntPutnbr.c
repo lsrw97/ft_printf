@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd_mod.c                                 :+:      :+:    :+:   */
+/*   uIntPutnbr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 15:50:07 by eelisaro          #+#    #+#             */
-/*   Updated: 2022/12/17 17:03:39 by eelisaro         ###   ########.fr       */
+/*   Updated: 2022/12/17 17:09:12 by eelisaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,11 @@
 # include <stdlib.h>
 #include "ft_printf.h"
 
-static int	intlength(int n)
+static int	intlength(unsigned int n)
 {
 	int	i;
-	int	neg;
 
 	i = 0;
-	if (n < 0)
-		neg = 1;
-	else
-		neg = 0;
 	if (n == 0)
 		return (1);
 	while (n != 0)
@@ -37,39 +32,32 @@ static int	intlength(int n)
 		n /= 10;
 		i++;
 	}
-	return (i + neg);
+	return (i);
 }
 
-static char	*ft_itoas(long n)
+static char	*ft_itoas(unsigned int n)
 {
 	char		*str;
 	int			len;
 	int			i;
-	long	num;
 
-	num = n;
-	len = intlength(num);
+	len = intlength(n);
 	str = malloc(len + 1);
 	if (len == 0 || !str)
 		return (NULL);
-	if (num == 0)
+	if (n == 0)
 		str[0] = '0';
-	if (num < 0)
-	{
-		str[0] = '-';
-		num *= -1;
-	}
 	str[len] = '\0';
-	while (num != 0)
+	while (n != 0)
 	{
-		i = num % 10;
+		i = n % 10;
 		str[len-- - 1] = i + 48;
-		num /= 10;
+		n /= 10;
 	}
 	return (str);
 }
 
-void	ft_putnbr_fd_mod(long n, int fd, int *len)
+void	uIntPutnbr(unsigned int n, int fd, int *len)
 {
 	char			*str;
 	int				i;

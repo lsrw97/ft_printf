@@ -3,6 +3,8 @@ DIRLIB		= ./libft/
 SRCS	=	ft_printf.c \
 			ft_putnbr_fd_mod.c \
 			printconvfromdec.c \
+			uIntPutnbr.c		\
+			convertX.c	\
 
 OBJS	= ${SRCS:.c=.o}
 

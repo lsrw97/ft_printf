@@ -6,7 +6,7 @@
 /*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:55:31 by eelisaro          #+#    #+#             */
-/*   Updated: 2022/12/16 20:19:56 by eelisaro         ###   ########.fr       */
+/*   Updated: 2022/12/17 18:22:44 by eelisaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 // #include "./ft_strlen.c"
 #include "./libft/libft.h"
 #include "ft_printf.h"
+
+
 
 int ft_printf(const char *str, ...)
 {
@@ -86,21 +88,21 @@ int ft_printf(const char *str, ...)
 				case 'u':
 					ud = (unsigned int) va_arg(ap, int);
 					// printf("%lld", d);
-					ft_putnbr_fd_mod(ud, 1, countchar);
+					uIntPutnbr(ud, 1, countchar);
 					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case 'x':
 					d = va_arg(ap, long long);
 					if (d < 0)
 						d += 4294967296;
-					printconvfromdec(16, d, "0123456789abcdef", countchar);
+					convertX(16, d, "0123456789abcdef", countchar);
 					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case 'X':
 					d = va_arg(ap, long long);
 					if (d < 0)
 						d += 4294967296;
-					printconvfromdec(16, d, "0123456789ABCDEF", countchar);
+					convertX(16, d, "0123456789ABCDEF", countchar);
 					// printf("\n%d\n", countchar[0]);
 					continue ;
 				case '%':
@@ -127,8 +129,12 @@ int ft_printf(const char *str, ...)
 // 	// 	printf("%d\n\n", count);
 
 //     // count = printf("%c, %s, %p, %d, %i, %u, %x, %X, %%\n\n", 'c', s, s, -12345, -54321, 15243, 5, -2);
-// 	printf(" %p %p \n\n", 0, 0);
-// 	ft_printf(" %p %p\n\n", 0, 0);
+// 	printf(" %x %x %x %x %x %x %x\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
+// 	ft_printf(" %x %x %x %x %x %x %x\n\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
+
+// ft_printf(" %x %x %x %x %x %x %x\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
+// printf(" %x %x %x %x %x %x %x", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
+
 // 	// printf("%s NULL NULL\n\n", NULL);
 //     // printconvfromdec(16, 110, "0123456789abcdef", &);
 //     return 0;
