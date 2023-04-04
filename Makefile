@@ -5,8 +5,11 @@ SRCS	=	ft_printf.c \
 			printconvfromdec.c \
 			uIntPutnbr.c		\
 			convertX.c	\
+			cases.c	\
 
-OBJS	= ${SRCS:.c=.o}
+OBJ	= ${SRCS:.c=.o}
+
+LIBFT   = ./libft/libft.a
 
 NAME	= libftprintf.a
 
@@ -20,25 +23,51 @@ CFLAGS	= -Wall -Wextra -Werror
 
 NAMELFT		= libft.a
 
-
 all:		${NAME}
 
-%.o: %.c
-	${CC} ${CFLAGS} -c -I. -I${DIRLIB} $< -o ${<:.c=.o}
+# %.o: %.c
+# 	${CC} ${CFLAGS} -c -I. -I${DIRLIB} $< -o ${<:.c=.o}
 
-${NAME}:	${OBJS}
-	cd ${DIRLIB} && ${MAKE} && cp -v ${NAMELFT} ../${NAME}
-	${AR} ${NAME} ${OBJS}
+$(NAME):	$(OBJ) $(LIBFT)
+				ar rcs $(NAME) $(OBJ)
+
+$(LIBFT):
+	make -C ./libft
+	cp ./libft/libft.a $(NAME)
 
 clean:
-	${RM} ${BONUS_OBJS} ${OBJS}
-	cd ${DIRLIB} && make clean
+	make clean -C ./libft
+		$(RM) $(OBJ) $(BOBJ)
 
-fclean:		clean
-	${RM} ${BONUS_OBJS} ${NAME}
-	cd ${DIRLIB} && make fclean
+fclean: clean
+	make fclean -C ./libft
+	$(RM) $(NAME)
 
 re:			fclean all
-			cd ${DIRLIB} && ${MAKE} clean
+				cd ${DIRLIB} && ${MAKE} clean
 
 .PHONY:		all clean fclean re
+
+
+# NAME    =               libftprintf.a
+# LIBFT   =               ./libft/libft.a
+# CC              =               cc
+# CFLAGS  =               -Wall -Wextra -Werror
+# RM              =               rm -f
+# SRC     =               srcs/ft_printf.c srcs/ft_printf_utils.c
+# OBJ             =               $(SRC:.c=.o)
+
+# all:                    $(NAME)
+
+# $(NAME):	$(OBJ) $(LIBFT)
+# 				ar rcs  $(NAME) $(OBJ)
+# $(LIBFT):
+#                                 make -C ./libft
+#                                 cp ./libft/libft.a $(NAME)
+# clean:
+#                                 make clean -C ./libft
+#                                 $(RM) $(OBJ) $(BOBJ)
+# fclean: clean
+#                                 make fclean -C ./libft
+#                                 $(RM) $(NAME)
+# re:             fclean  $(NAME)

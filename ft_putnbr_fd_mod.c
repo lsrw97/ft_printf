@@ -6,13 +6,10 @@
 /*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 15:50:07 by eelisaro          #+#    #+#             */
-/*   Updated: 2022/12/17 17:03:39 by eelisaro         ###   ########.fr       */
+/*   Updated: 2022/12/18 15:29:49 by eelisaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "libft.h"
-# include <unistd.h>
-# include <stdlib.h>
 #include "ft_printf.h"
 
 static int	intlength(int n)
@@ -40,11 +37,11 @@ static int	intlength(int n)
 	return (i + neg);
 }
 
-static char	*ft_itoas(long n)
+char	*ft_itoas(long n)
 {
-	char		*str;
-	int			len;
-	int			i;
+	char	*str;
+	int		len;
+	int		i;
 	long	num;
 
 	num = n;

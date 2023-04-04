@@ -6,13 +6,10 @@
 /*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 15:50:07 by eelisaro          #+#    #+#             */
-/*   Updated: 2022/12/17 17:09:12 by eelisaro         ###   ########.fr       */
+/*   Updated: 2022/12/18 13:53:36 by eelisaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "libft.h"
-# include <unistd.h>
-# include <stdlib.h>
 #include "ft_printf.h"
 
 static int	intlength(unsigned int n)
@@ -57,7 +54,7 @@ static char	*ft_itoas(unsigned int n)
 	return (str);
 }
 
-void	uIntPutnbr(unsigned int n, int fd, int *len)
+void	uintputnbr(unsigned int n, int fd, int *len)
 {
 	char			*str;
 	int				i;
