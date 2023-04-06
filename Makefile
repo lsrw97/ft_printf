@@ -11,7 +11,7 @@ OBJ	= ${SRCS:.c=.o}
 
 LIBFT   = ./libft/libft.a
 
-NAME	= libftprintf.a
+NAME	= printlibft.a
 
 CC		= gcc
 
